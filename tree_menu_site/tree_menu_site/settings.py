@@ -81,8 +81,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'tree_menu',
-        'USER': 'djuser',
-        'PASSWORD': 'akella279',
+        'USER': 'tree_menu_user',
+        'PASSWORD': '1234',
         'HOST': 'localhost',
         'PORT': '5432',
     }
