@@ -1,0 +1,9 @@
+<ul>
+    {% if node.slug == path_lst|last %}
+    <li><a class="selected" href="{{ node.path }}">{{ node.name }}</a></li>
+    {% else %}
+    <li><a href="{{ node.path }}">{{ node.name }}</a></li>
+    {% endif %}
+
+    {% include 'tree_menu/tree_menu.html' %}
+</ul>

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load tree_menu_tags %}
+
+{% block content %}
+
+{% draw_menu 'Упражнения по целевой мышечной группе' %}
+{% draw_menu 'Упражнения по уровню сложности' %}
+{% draw_menu 'Упражнения по используемому инвентарю' %}
+
+<img src="{% static 'tree_menu/images/ротвейлер.jpg' %}">
+
+{% endblock %}

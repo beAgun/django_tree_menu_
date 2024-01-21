@@ -1,0 +1,5 @@
+body {background: #e6e6fa;}
+ul {list-style-type: none;}
+a {text-decoration: none; color: black;}
+a:hover{color: #ff9900;}
+a .selected {color: #ff9900;}
