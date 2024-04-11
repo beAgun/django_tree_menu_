@@ -36,7 +36,6 @@ class MenuForm(forms.ModelForm):
 
         for root in roots:
             rec(root)
-            print('*****tree*****', tree)
 
         return tree
 
@@ -49,4 +48,4 @@ class MenuForm(forms.ModelForm):
                 if parent.pk in tree[pk]['descendants']:
                     raise ValidationError('Потомок не может быть родителем или '
                                           'нельзя быть родителем для себя самого!')
-        super().clean()
+        return self.cleaned_data
