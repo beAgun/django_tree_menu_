@@ -1,0 +1,20 @@
+{% load template_filters %}
+
+<ul>
+    {% if node.slug == path_lst|last %}
+    <li><a class="selected" href="{{ node.path }}">{{ node.name }}</a></li>
+    {% else %}
+    <li><a href="{{ node.path }}">{{ node.name }}</a></li>
+    {% endif %}
+
+    {% if node.slug in path_lst %}
+        {% if node.children %}
+            {% for child in node.children %}
+                {% with node=tree|get_item:child template_name='tree_menu/tree_menu2.html' %}
+                    <li>{% include template_name %}</li>
+                {% endwith %}
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+
+</ul>
