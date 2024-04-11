@@ -1,9 +1,11 @@
 from django.contrib import admin
+
+from .forms import MenuForm
 from .models import Menu
 
 
-# Register your models here.
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug', 'parent']
+    list_display = ['id', 'name', 'slug', 'parent']
     prepopulated_fields = {'slug': ('name', )}
+    form = MenuForm

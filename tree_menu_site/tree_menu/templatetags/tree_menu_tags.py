@@ -7,21 +7,24 @@ from ..models import Menu
 register = template.Library()
 
 
-@register.inclusion_tag('tree_menu/menu_root.html', takes_context=True)
+@register.inclusion_tag('tree_menu/tree_menu2.html', takes_context=True)
 def draw_menu(context, menu_name):
-    path_lst = ['']
-    if 'menu_item_path_selected' in context:
-        path_lst = context['menu_item_path_selected'].split('/')
+    path_lst = context['request'].path.split('/')
+    while '' in path_lst:
+        path_lst.remove('')
+
     menu = Menu.objects.all()
 
-    tree = {}
+    tree, root = {}, None
     for i in menu:
-        tree[i.id] = {'name': i.name, 'slug': i.slug, 'children': []}
+        tree.setdefault(i.id, {'children': []})
+        tree[i.id]['name'] = i.name
+        tree[i.id]['slug'] = i.slug
 
-        if i.parent_id is None:
-            if i.name == menu_name:
-                root = i.id
+        if i.name == menu_name:
+            root = i.id
         else:
+            tree.setdefault(i.parent_id, {'children': []})
             tree[i.parent_id]['children'] += [i.id]
 
     def rec(node, tree):
@@ -35,9 +38,11 @@ def draw_menu(context, menu_name):
 
         return tree
 
-    tree = rec(root, tree)
+    if root:
+        tree = rec(root, tree)
 
-    return {'path_lst': path_lst, 'node': tree[root], 'children': tree[root]['children'], 'tree': tree}
+        return {'path_lst': path_lst, 'node': tree[root],
+                'children': tree[root]['children'], 'tree': tree,}
 
 #----------------------------------------------------------------------------------------------------------
 # другие способы
@@ -47,6 +52,9 @@ def draw_menu2(context, menu_name):
     if 'menu_item_path_selected' in context:
         path_lst = context['menu_item_path_selected'].split('/')
     menu = Menu.objects.all()
+
+    if not menu:
+        return '<h1>Nothing</h1>'
 
     tree = {}
     for i in menu:

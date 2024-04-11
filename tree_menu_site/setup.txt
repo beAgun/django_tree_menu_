@@ -1,0 +1,58 @@
+/etc/systemd/system/gunicorn.socket
+
+[Unit]
+Description=gunicorn socket
+
+[Socket]
+ListenStream=/run/gunicorn.sock
+
+[Install]
+WantedBy=sockets.target
+
+/etc/systemd/system/gunicorn.service
+
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+User=sammy
+Group=www-data
+WorkingDirectory=/home/sammy/tree_menu
+ExecStart=/home/sammy/tree_menu/env/bin/gunicorn \
+          --access-logfile - \
+          --workers 3 \
+          --bind unix:/run/gunicorn.sock \
+          tree_menu_site.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+
+
+nginx
+
+server {
+    listen 80;
+    server_name myworkout.whitebeef.ru;
+    access_log  /var/log/nginx/tree_menu_access.log;
+    error_log  /var/log/nginx/tree_menu_error.log;
+
+    location /admin/ {
+        allow 192.168.71.20;
+        deny all;
+    }
+    location /favicon.ico { access.log off; log_not_found off; }
+    location /static/ {
+        root /home/sammy/tree_menu;
+    }
+
+    location /media/ {
+        root /home/sammy/tree_menu;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/run/gunicorn.sock;
+    }
+}
