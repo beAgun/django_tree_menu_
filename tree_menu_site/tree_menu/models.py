@@ -9,6 +9,8 @@ class Menu(models.Model):
                                null=True, blank=True,
                                related_name='children',
                                verbose_name='Родитель')
+    root = models.ForeignKey(to='self', on_delete=models.CASCADE,
+                             verbose_name='Корень/название меню')
 
     objects = models.Manager
 
@@ -21,3 +23,13 @@ class Menu(models.Model):
 
     def get_absolute_url(self):
         return reverse('menu_item', kwargs={'menu_item_path': self.slug})
+
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
+        if self.parent is None:
+            self.root = self
+        else:
+            self.root = self.parent.root
+        
+        super(Menu, self).save()

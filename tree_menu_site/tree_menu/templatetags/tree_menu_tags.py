@@ -13,7 +13,7 @@ def draw_menu(context, menu_name):
     while '' in path_lst:
         path_lst.remove('')
 
-    menu = Menu.objects.all()
+    menu = Menu.objects.filter(root__name=menu_name)
 
     tree, root = {}, None
     for i in menu:
