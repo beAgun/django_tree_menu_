@@ -20,6 +20,7 @@ def draw_menu(context, menu_name):
         tree.setdefault(i.id, {'children': []})
         tree[i.id]['name'] = i.name
         tree[i.id]['slug'] = i.slug
+        tree[i.id]['path'] = i.get_absolute_url()
 
         if i.name == menu_name:
             root = i.id
@@ -27,18 +28,5 @@ def draw_menu(context, menu_name):
             tree.setdefault(i.parent_id, {'children': []})
             tree[i.parent_id]['children'] += [i.id]
 
-    def rec(node, tree):
-        if node == root:
-            tree[node]['path'] = reverse('menu_item',
-                                         kwargs={'menu_item_path': tree[node]['slug']})
-
-        for child in tree[node]['children']:
-            tree[child]['path'] = tree[node]['path'] + tree[child]['slug'] + '/'
-            tree = rec(child, tree)
-
-        return tree
-
     if root:
-        tree = rec(root, tree)
-
-        return {'path_lst': path_lst, 'node': tree[root], 'tree': tree,}
+        return {'path_lst': path_lst, 'node': tree[root], 'tree': tree, }

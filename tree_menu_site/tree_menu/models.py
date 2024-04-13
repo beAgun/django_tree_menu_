@@ -30,10 +30,10 @@ class Menu(models.Model):
         print(self, self.parent)
         if self.parent is None:
             self.root = self.name
-            self.path = self.slug + '/'
+            self.path = self.slug
 
         else:
             self.root = self.parent.root
-            self.path = self.parent.path + self.slug + '/'
+            self.path = self.parent.path + self.slug
 
         super(Menu, self).save()
