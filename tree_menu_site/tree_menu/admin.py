@@ -6,6 +6,6 @@ from .models import Menu
 
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'slug', 'parent', 'root']
+    list_display = ['id', 'name', 'slug', 'parent', 'root', 'path']
     prepopulated_fields = {'slug': ('name', )}
     form = MenuForm
