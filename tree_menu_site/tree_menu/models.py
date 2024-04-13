@@ -11,6 +11,8 @@ class Menu(models.Model):
                                verbose_name='Родитель')
     root = models.CharField(max_length=255, verbose_name='Корень/название меню')
     path = models.URLField(verbose_name='Путь')
+    children_id = models.JSONField(null=True, blank=True,
+                                   verbose_name='Дети')
 
     objects = models.Manager
 
@@ -34,6 +36,6 @@ class Menu(models.Model):
 
         else:
             self.root = self.parent.root
-            self.path = self.parent.path + self.slug
+            self.path = self.parent.path + '/' + self.slug
 
         super(Menu, self).save()
